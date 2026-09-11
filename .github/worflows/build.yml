@@ -1,4 +1,3 @@
-```yaml
 name: Build Peaga Files
 
 on:
@@ -86,4 +85,3 @@ jobs:
           name: PeagaFiles-IPA
           path: PeagaFiles.ipa
           if-no-files-found: error
-```
