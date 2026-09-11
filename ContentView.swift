@@ -16,10 +16,12 @@ struct ContentView: View {
 
                 VStack(spacing: 20) {
 
-                    Image(systemName: "shield.lefthalf.filled")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.blue)
-                        .padding(.top, 20)
+                    Image(
+                        systemName: "folder.badge.questionmark"
+                    )
+                    .font(.system(size: 60))
+                    .foregroundStyle(.blue)
+                    .padding(.top, 20)
 
                     Text("Peaga Files")
                         .font(.largeTitle.bold())
@@ -43,7 +45,9 @@ struct ContentView: View {
                             if testing {
                                 ProgressView()
                             } else {
-                                Image(systemName: "magnifyingglass")
+                                Image(
+                                    systemName: "magnifyingglass"
+                                )
                             }
 
                             Text(
@@ -93,17 +97,17 @@ struct ContentView: View {
 
                     if !games.isEmpty {
 
-                        VStack(alignment: .leading, spacing: 10) {
+                        VStack(
+                            alignment: .leading,
+                            spacing: 10
+                        ) {
 
                             Text("Conclusão")
                                 .font(.headline)
 
-                            Text(
-                                conclusionText
-                            )
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-
+                            Text(conclusionText)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
                         }
                         .frame(
                             maxWidth: .infinity,
@@ -196,6 +200,10 @@ struct ContentView: View {
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
         }
+        .frame(
+            maxWidth: .infinity,
+            alignment: .leading
+        )
         .padding()
         .background(
             Color.secondary.opacity(0.12)
@@ -283,34 +291,22 @@ struct ContentView: View {
 
     private var conclusionText: String {
 
-        let freeFire = games.first {
-            $0.bundleID == "com.dts.freefireth"
+        let allBlocked = games.allSatisfy {
+            $0.accessStatus == "BLOQUEADO"
         }
 
-        let max = games.first {
-            $0.bundleID == "com.dts.freefiremax"
-        }
-
-        let freeFireBlocked =
-            freeFire?.accessStatus == "BLOQUEADO"
-
-        let maxBlocked =
-            max?.accessStatus == "BLOQUEADO"
-
-        if freeFireBlocked && maxBlocked {
+        if allBlocked {
 
             return """
-            O Peaga Files conseguiu identificar os Bundle IDs conhecidos,
-            mas não recebeu acesso aos containers privados.
-
-            Isso indica bloqueio do sandbox do iOS para os dados dos jogos.
+            Os containers privados dos jogos continuam inacessíveis.
+            O motivo é o isolamento entre aplicativos imposto pelo
+            sandbox do iOS.
             """
         }
 
         return """
-        O resultado não foi totalmente bloqueado.
-        Os próximos testes devem analisar exatamente quais caminhos
-        permaneceram acessíveis.
+        Algum caminho retornou um resultado diferente.
+        O próximo passo é analisar exatamente qual diretório foi acessível.
         """
     }
 
